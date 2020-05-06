@@ -1,0 +1,467 @@
+cscope 15 $HOME/work/algorithm/ch31/prim               0000002272
+	@main.cpp
+
+1 
+	~<io¡»am
+>
+
+2 
+	~<veùÜ
+>
+
+3 
+	~<®gÜ™hm
+>
+
+5 
+usšg
+ 
+Çme¥aû
+ 
+	g¡d
+;
+
+7 cÚ¡ 
+	gMAX_V
+ = 100;
+
+8 cÚ¡ 
+	gINF
+ = 987654321;
+
+9 
+	gV
+;
+
+11 
+	gveùÜ
+<
+	g·œ
+<,>> 
+	gadj
+[
+MAX_V
+];
+
+13 
+	$make_g¿ph
+() {
+
+15 
+adj
+[0].
+	`push_back
+(
+	`make_·œ
+(1,5));
+
+16 
+adj
+[0].
+	`push_back
+(
+	`make_·œ
+(2,1));
+
+19 
+adj
+[1].
+	`push_back
+(
+	`make_·œ
+(0,5));
+
+20 
+adj
+[1].
+	`push_back
+(
+	`make_·œ
+(3,1));
+
+21 
+adj
+[1].
+	`push_back
+(
+	`make_·œ
+(5,3));
+
+22 
+adj
+[1].
+	`push_back
+(
+	`make_·œ
+(6,3));
+
+25 
+adj
+[2].
+	`push_back
+(
+	`make_·œ
+(0,1));
+
+26 
+adj
+[2].
+	`push_back
+(
+	`make_·œ
+(3,4));
+
+29 
+adj
+[3].
+	`push_back
+(
+	`make_·œ
+(1,1));
+
+30 
+adj
+[3].
+	`push_back
+(
+	`make_·œ
+(2,4));
+
+31 
+adj
+[3].
+	`push_back
+(
+	`make_·œ
+(4,5));
+
+32 
+adj
+[3].
+	`push_back
+(
+	`make_·œ
+(5,3));
+
+35 
+adj
+[4].
+	`push_back
+(
+	`make_·œ
+(3,5));
+
+38 
+adj
+[5].
+	`push_back
+(
+	`make_·œ
+(1,3));
+
+39 
+adj
+[5].
+	`push_back
+(
+	`make_·œ
+(3,3));
+
+40 
+adj
+[5].
+	`push_back
+(
+	`make_·œ
+(6,2));
+
+43 
+adj
+[6].
+	`push_back
+(
+	`make_·œ
+(1,3));
+
+44 
+adj
+[6].
+	`push_back
+(
+	`make_·œ
+(5,2));
+
+45 
+	}
+}
+
+47 
+´im
+(
+veùÜ
+<
+·œ
+<,>>& 
+£Ëùed
+) {
+
+48 
+	g»t
+ = 0;
+
+49 
+	g£Ëùed
+.
+þ—r
+();
+
+51 
+	gveùÜ
+<
+	gboÞ
+> 
+added
+(
+V
+, 
+çl£
+);
+
+52 
+	gveùÜ
+<> 
+mšWeight
+(
+V
+, 
+INF
+);
+
+53 
+	gveùÜ
+<> 
+·»Á
+(
+V
+, -1);
+
+55 
+	gmšWeight
+[0] = 
+·»Á
+[0] = 0;
+
+57 
+	g™”
+ = 0; i‹¸< 
+	gV
+; ++
+	gv
+) {
+
+58 
+	gu
+ = -1;
+
+59 
+	gv
+ = 0; v < 
+	gV
+; ++v)
+
+60 if(!
+	gadded
+[
+v
+] && (
+	gu
+ =ð-1 || 
+mšWeight
+[
+u
+] > minWeight[v]))
+
+61 
+u
+ = 
+v
+;
+
+63 if(
+	g·»Á
+[
+u
+] != u)
+
+64 
+£Ëùed
+.
+push_back
+(
+make_·œ
+(
+·»Á
+[
+u
+], u));
+
+66 
+	g»t
+ +ð
+mšWeight
+[
+u
+];
+
+67 
+	gadded
+[
+u
+] = 
+Œue
+;
+
+70 
+	gi
+ = 0; i < 
+	gadj
+[
+u
+].
+size
+(); ++i) {
+
+71 
+	gv
+ = 
+adj
+[
+u
+][
+i
+].
+fœ¡
+;
+
+72 
+	gweight
+ = 
+adj
+[
+u
+][
+i
+].
+£cÚd
+;
+
+74 if(!
+	gadded
+[
+v
+] && (
+	gmšWeight
+[v] > 
+	gweight
+)) {
+
+75 
+	g·»Á
+[
+v
+] = 
+u
+;
+
+76 
+	gmšWeight
+[
+v
+] = 
+weight
+;
+
+80  
+	g»t
+;
+
+83 
+	$maš
+() {
+
+84 
+V
+ = 7;
+
+85 
+	`make_g¿ph
+();
+
+87 
+veùÜ
+<
+·œ
+<,>> 
+£Ëùed
+;
+
+88 
+cout
+ << "»suÉ: " << 
+	`´im
+(
+£Ëùed
+è<< 
+’dl
+;
+
+90 
+i
+ = 1;
+
+91 auto&& 
+™em
+ : 
+£Ëùed
+) {
+
+92 
+cout
+ << 
+i
+ << "thƒdge"
+
+93 << " from: " << 
+¡©ic_ÿ¡
+<>('a'+
+™em
+.
+fœ¡
+)
+
+94 << "o: " << 
+¡©ic_ÿ¡
+<>('a'+
+™em
+.
+£cÚd
+è<< 
+’dl
+;
+
+95 ++
+i
+;
+
+99 
+	}
+}
+
+	@
+1
+.
+1
+/usr/include
+1
+9
+main.cpp

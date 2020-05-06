@@ -1,14 +1,12 @@
 #include <iostream>
-
 #include <vector>
 #include <algorithm>
 
-#include "disjointset.h"
+using namespace std;
 
 const int MAX_V = 100;
+const int INF = 987654321;
 int V;
-
-using namespace std;
 
 vector<pair<int,int>> adj[MAX_V];
 
@@ -44,45 +42,43 @@ void make_graph() {
   // vertex g
   adj[6].push_back(make_pair(1,3)); // g-b
   adj[6].push_back(make_pair(5,2)); // g-f
-
-#if 0
-  for (auto& v : adj) {
-    vector<pair<int,int>>::iterator iter;
-    for (iter=v.begin(); iter!=v.end(); ++iter)
-      cout << "[" << iter->first << "," << iter->second << "]" << endl;
-  }
-#endif
 }
 
-int kruskal(vector<pair<int,int>>& selected) {
+int prim(vector<pair<int,int>>& selected) {
   int ret = 0;
   selected.clear();
 
-  vector<pair<int,pair<int,int>>> edges;
-  for(int u = 0; u < V; ++u) {
+  vector<bool> added(V, false);
+  vector<int> minWeight(V, INF);
+  vector<int> parent(V, -1);
+
+  minWeight[0] = parent[0] = 0;
+
+  for(int iter = 0; iter < V; ++iter) {
+
+    // find next vertex
+    int u = -1;
+    for(int v = 0; v < V; ++v)
+      if(!added[v] && (u == -1 || minWeight[u] > minWeight[v]))
+          u = v;
+
+    // add (parent[u],u) into tree
+    if(parent[u] != u)
+      selected.push_back(make_pair(parent[u], u));
+
+    ret += minWeight[u];
+    added[u] = true;
+
+    // check edges(u,v) near u
     for(int i = 0; i < adj[u].size(); ++i) {
       int v = adj[u][i].first;
-      int cost = adj[u][i].second;
+      int weight = adj[u][i].second;
 
-      edges.push_back(make_pair(cost, make_pair(u, v)));
+      if(!added[v] && (minWeight[v] > weight)) {
+          parent[v] = u;
+          minWeight[v] = weight;
+      }
     }
-  }
-
-  sort(edges.begin(), edges.end());
-
-  OptimizedDisjointSet sets(V);
-
-  for(int i = 0; i < edges.size(); ++i) {
-    int cost = edges[i].first;
-    int u = edges[i].second.first;
-    int v = edges[i].second.second;
-
-    if (sets.find(u) == sets.find(v))
-      continue;
-
-    sets.merge(u, v);
-    selected.push_back(make_pair(u, v));
-    ret += cost;
   }
   return ret;
 }
@@ -92,7 +88,7 @@ int main() {
   make_graph();
 
   vector<pair<int,int>> selected;
-  cout << "result: " << kruskal(selected) << endl;
+  cout << "result: " << prim(selected) << endl;
 
   int i = 1;
   for(auto&& item : selected) {

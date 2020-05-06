@@ -6,5 +6,5 @@ TARGET=a.out
 $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(OBJS): disjointset.h main.cpp
+$(OBJS): main.cpp
 	$(CXX) $(CXXFLAGS) -c $^
