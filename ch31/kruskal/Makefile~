@@ -1,0 +1,10 @@
+CXX=g++
+CXXFLAGS=-g -Wall
+OBJS=main.o
+TARGET=a.out
+
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+main.o: disjointset.h main.cpp
+	$(CXX) $(CXXFLAGS) $^
