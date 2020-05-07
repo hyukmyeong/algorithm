@@ -1,102 +1,99 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
-const int MAX_V = 100;
-const int INF = 987654321;
-int V;
+class OptimizedDisjointSet {
+public:
+  OptimizedDisjointSet(int n) : parent(n), rank(n) {
+    for(int i=0; i<n; ++i)
+      parent[i] = i;
+  }
 
-vector<pair<int,int>> adj[MAX_V];
+  int find(int u) {
+    if(u == parent[u])
+      return u;
+    return  parent[u] = find(parent[u]);
+  }
 
-void make_graph() {
-  // vertex a
-  adj[0].push_back(make_pair(1,5)); // a-b
-  adj[0].push_back(make_pair(2,1)); // a-c
+  void merge(int u, int v) {
+    u = find(u);
+    v = find(v);
 
-  // vertex b
-  adj[1].push_back(make_pair(0,5)); // b-a
-  adj[1].push_back(make_pair(3,1)); // b-d
-  adj[1].push_back(make_pair(5,3)); // b-f
-  adj[1].push_back(make_pair(6,3)); // b-g
+    if(u==v)
+      return;
 
-  // vertex c
-  adj[2].push_back(make_pair(0,1)); // c-a
-  adj[2].push_back(make_pair(3,4)); // c-d
+    if(rank[u] > rank[v])
+      swap(u, v);
 
-  // vertex d
-  adj[3].push_back(make_pair(1,1)); // d-b
-  adj[3].push_back(make_pair(2,4)); // d-c
-  adj[3].push_back(make_pair(4,5)); // d-e
-  adj[3].push_back(make_pair(5,3)); // d-f
+    parent[u] = v;
 
-  // vertex e
-  adj[4].push_back(make_pair(3,5)); // e-d
+    if(rank[u] == rank[v])
+      ++rank[v];
+  }
+private:
+  vector<int> parent, rank;
+};
 
-  // vertex f
-  adj[5].push_back(make_pair(1,3)); // f-b
-  adj[5].push_back(make_pair(3,3)); // f-d
-  adj[5].push_back(make_pair(6,2)); // f-g
+int C, N, M;
+const int MAX_V = 500;
+vector<pair<int,int>> point;
 
-  // vertex g
-  adj[6].push_back(make_pair(1,3)); // g-b
-  adj[6].push_back(make_pair(5,2)); // g-f
-}
+double kruskal(OptimizedDisjointSet& set) {
+  double ret = 0.0;
 
-int prim(vector<pair<int,int>>& selected) {
-  int ret = 0;
-  selected.clear();
+  vector<pair<double,pair<int,int>>> edges;
+  for(int u = 0; u < N; ++u) {
+    for(int v = u+1; v < N; ++v) {
+      // weight = distance = sqrt (subX^2 + subY^2)
+      int distance_x = abs(point[u].first - point[v].first);
+      int distance_y = abs(point[u].second - point[v].second);
+      double distance = sqrt(distance_x * distance_x + distance_y * distance_y);
 
-  vector<bool> added(V, false);
-  vector<int> minWeight(V, INF);
-  vector<int> parent(V, -1);
-
-  minWeight[0] = parent[0] = 0;
-
-  for(int iter = 0; iter < V; ++iter) {
-
-    // find next vertex
-    int u = -1;
-    for(int v = 0; v < V; ++v)
-      if(!added[v] && (u == -1 || minWeight[u] > minWeight[v]))
-          u = v;
-
-    // add (parent[u],u) into tree
-    if(parent[u] != u)
-      selected.push_back(make_pair(parent[u], u));
-
-    ret += minWeight[u];
-    added[u] = true;
-
-    // check edges(u,v) near u
-    for(int i = 0; i < adj[u].size(); ++i) {
-      int v = adj[u][i].first;
-      int weight = adj[u][i].second;
-
-      if(!added[v] && (minWeight[v] > weight)) {
-          parent[v] = u;
-          minWeight[v] = weight;
-      }
+      edges.push_back(make_pair(distance, make_pair(u,v)));
     }
+  }
+
+  sort(edges.begin(), edges.end());
+
+  for(int i = 0; i < edges.size(); ++i) {
+    double cost = edges[i].first;
+    int u = edges[i].second.first;
+    int v = edges[i].second.second;
+
+    if (set.find(u) == set.find(v))
+      continue;
+
+    set.merge(u, v);
+    ret += cost;
   }
   return ret;
 }
 
-int main() {
-  V = 7;
-  make_graph();
+int main()
+{
+  cin >> C;
+  for(int i=0; i<C; i++) {
+    cin >> N >> M;
 
-  vector<pair<int,int>> selected;
-  cout << "result: " << prim(selected) << endl;
+    point = vector<pair<int, int>>(N, make_pair(0, 0));
+    OptimizedDisjointSet set(N);
 
-  int i = 1;
-  for(auto&& item : selected) {
-    cout << i << "th edge"
-         << " from: " << static_cast<char>('a'+item.first)
-         << " to: " << static_cast<char>('a'+item.second) << endl;
-    ++i;
+    for (int j=0; j<N; j++)
+      cin >> point[j].first;
+
+    for (int j=0; j<N; j++)
+      cin >> point[j].second;
+
+    for (int j=0; j<M; j++){
+      int u, v;
+      cin >> u >> v;
+
+      set.merge(u, v);
+    }
+    cout << fixed << kruskal(set) << endl;
   }
-
   return 0;
 }
