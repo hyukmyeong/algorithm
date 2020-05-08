@@ -11,7 +11,7 @@ const int MAX_N = 2000;
 int C, N, M;
 vector<pair<int,int> > adj[MAX_N];
 
-// by BFS (or DFS) 
+// by BFS (or DFS)
 bool hasPath(int lo, int hi)
 {
     queue<int> q;
@@ -46,30 +46,31 @@ bool hasPath(int lo, int hi)
     return false;
 }
 
-
-int minUpperBound(vector<int>& weights, int low)
+int optimized(vector<int>& weights)
 {
-    int lo = low - 1;
-    int hi = weights.size();
+    int ret = INF;
+    int foundPathUsing = 0;
 
-    while(lo + 1 <  hi)
+    for(int lo = 0; lo < weights.size(); ++lo)
     {
-        int mid = (lo + hi) / 2;
+        bool foundPath = false;
 
-        if(hasPath(weights[low], weights[mid]))
+        for(int hi = foundPathUsing; hi < weights.size(); ++hi)
         {
-            hi = mid;
+            if(hasPath(weights[lo], weights[hi]))
+            {
+                ret = min(ret, weights[hi] - weights[lo]);
+
+                foundPath = true;
+                foundPathUsing = hi;
+                break;
+            }
         }
-        else
-        {
-            lo = mid;
-        }
+
+        if(!foundPath)
+            break;
     }
-
-    if(hi == weights.size())
-        return INF;
-
-    return weights[hi];
+    return ret;
 }
 
 int main()
@@ -85,6 +86,7 @@ int main()
             adj[i].clear();
 
         vector<int> weights;
+
         for(int i=0,u,v,w; i<M; ++i)
         {
             cin >> u >> v >> w;
@@ -95,12 +97,7 @@ int main()
         }
         sort(weights.begin(), weights.end());
 
-        int ret = INF;
-
-        for(int i=0; i < weights.size(); ++i)
-            ret = min(ret, minUpperBound(weights, i) - weights[i]);
-
-        result.push_back(ret);
+        result.push_back(optimized(weights));
     }
 
     for(const auto& e : result)

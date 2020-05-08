@@ -11,7 +11,7 @@ const int MAX_N = 2000;
 int C, N, M;
 vector<pair<int,int> > adj[MAX_N];
 
-// by BFS (or DFS) 
+// by BFS (or DFS)
 bool hasPath(int lo, int hi)
 {
     queue<int> q;
@@ -46,30 +46,25 @@ bool hasPath(int lo, int hi)
     return false;
 }
 
-
-int minUpperBound(vector<int>& weights, int low)
+int scanning(vector<int>& weights)
 {
-    int lo = low - 1;
-    int hi = weights.size();
+    int lo = 0;
+    int hi = 0;
+    int ret = INF;
 
-    while(lo + 1 <  hi)
+    while(lo < weights.size() && hi < weights.size())
     {
-        int mid = (lo + hi) / 2;
-
-        if(hasPath(weights[low], weights[mid]))
+        if(hasPath(weights[lo], weights[hi]))
         {
-            hi = mid;
+            ret = min(ret, weights[hi] - weights[lo]); 
+            ++lo;
         }
         else
         {
-            lo = mid;
+            ++hi;
         }
     }
-
-    if(hi == weights.size())
-        return INF;
-
-    return weights[hi];
+    return ret;
 }
 
 int main()
@@ -85,6 +80,7 @@ int main()
             adj[i].clear();
 
         vector<int> weights;
+
         for(int i=0,u,v,w; i<M; ++i)
         {
             cin >> u >> v >> w;
@@ -95,12 +91,7 @@ int main()
         }
         sort(weights.begin(), weights.end());
 
-        int ret = INF;
-
-        for(int i=0; i < weights.size(); ++i)
-            ret = min(ret, minUpperBound(weights, i) - weights[i]);
-
-        result.push_back(ret);
+        result.push_back(scanning(weights));
     }
 
     for(const auto& e : result)
