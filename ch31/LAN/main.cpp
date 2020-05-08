@@ -2,23 +2,27 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <iomanip>
 
 using namespace std;
 
 class OptimizedDisjointSet {
 public:
-  OptimizedDisjointSet(int n) : parent(n), rank(n) {
+  OptimizedDisjointSet(int n) : parent(n), rank(n)
+  {
     for(int i=0; i<n; ++i)
       parent[i] = i;
   }
 
-  int find(int u) {
+  int find(int u)
+  {
     if(u == parent[u])
       return u;
     return  parent[u] = find(parent[u]);
   }
 
-  void merge(int u, int v) {
+  void merge(int u, int v)
+  {
     u = find(u);
     v = find(v);
 
@@ -39,17 +43,27 @@ private:
 
 int C, N, M;
 const int MAX_V = 500;
-vector<pair<int,int>> point;
+//vector<pair<int,int>> point;
 
-double kruskal(OptimizedDisjointSet& set) {
+typedef struct {
+    int x;
+    int y;
+} Point;
+vector<Point> points;
+
+double kruskal(OptimizedDisjointSet& set)
+{
   double ret = 0.0;
 
-  vector<pair<double,pair<int,int>>> edges;
-  for(int u = 0; u < N; ++u) {
-    for(int v = u+1; v < N; ++v) {
+  vector<pair<double,pair<int,int > > > edges;
+
+  for(int u = 0; u < N; ++u)
+  {
+    for(int v = u+1; v < N; ++v)
+    {
       // weight = distance = sqrt (subX^2 + subY^2)
-      int distance_x = abs(point[u].first - point[v].first);
-      int distance_y = abs(point[u].second - point[v].second);
+      int distance_x = abs(points[u].x - points[v].x);
+      int distance_y = abs(points[u].y - points[v].y);
       double distance = sqrt(distance_x * distance_x + distance_y * distance_y);
 
       edges.push_back(make_pair(distance, make_pair(u,v)));
@@ -58,7 +72,8 @@ double kruskal(OptimizedDisjointSet& set) {
 
   sort(edges.begin(), edges.end());
 
-  for(int i = 0; i < edges.size(); ++i) {
+  for(int i = 0; i < edges.size(); ++i)
+  {
     double cost = edges[i].first;
     int u = edges[i].second.first;
     int v = edges[i].second.second;
@@ -75,25 +90,27 @@ double kruskal(OptimizedDisjointSet& set) {
 int main()
 {
   cin >> C;
-  for(int i=0; i<C; i++) {
+  for(int i=0; i<C; i++)
+  {
     cin >> N >> M;
 
-    point = vector<pair<int, int>>(N, make_pair(0, 0));
+    points = vector<Point>(N);
     OptimizedDisjointSet set(N);
 
     for (int j=0; j<N; j++)
-      cin >> point[j].first;
+      cin >> points[j].x;
 
     for (int j=0; j<N; j++)
-      cin >> point[j].second;
+      cin >> points[j].y;
 
-    for (int j=0; j<M; j++){
+    for (int j=0; j<M; j++)
+    {
       int u, v;
       cin >> u >> v;
 
       set.merge(u, v);
     }
-    cout << fixed << kruskal(set) << endl;
+    cout << setprecision(12) << kruskal(set) << endl;
   }
   return 0;
 }
