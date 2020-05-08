@@ -2,7 +2,6 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
-#include <iomanip>
 
 using namespace std;
 
@@ -110,7 +109,7 @@ int main()
 
       set.merge(u, v);
     }
-    cout << setprecision(12) << kruskal(set) << endl;
+    cout << fixed << kruskal(set) << endl;
   }
   return 0;
 }
