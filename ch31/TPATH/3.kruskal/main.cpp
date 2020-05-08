@@ -5,7 +5,8 @@
 
 using namespace std;
 
-#define MAX_N 2000
+const int INF = 987654321;
+const int MAX_N = 2000;
 
 int C, N, M;
 vector<pair<int,int> > adj[MAX_N];
@@ -48,28 +49,23 @@ private:
 };
 
 // by kruskal
-bool hasPath(vector<pair<int, pair<int,int>>>& edges, int lo, int hi)
+int minUpperBound(vector<pair<int,pair<int,int>>>& edges, vector<int>& weights, int low)
 {
-  OptimizedDisjointSet sets(N);
+    OptimizedDisjointSet sets(N);
 
-  for(int i = 0; i < edges.size(); ++i)
-  {
-    int weight = edges[i].first;
-    int u = edges[i].second.first;
-    int v = edges[i].second.second;
+    for(int i = 0; i < edges.size(); ++i)
+    {
+        if(edges[i].first < weights[low])
+          continue;
 
-    if((weight < lo) || (weight > hi))
-      continue;
+        int u = edges[i].second.first;
+        int v = edges[i].second.second;
+        sets.merge(u, v);
 
-    if (sets.find(u) == sets.find(v))
-      continue;
-
-    sets.merge(u, v);
-
-    if(sets.find(0) == sets.find(N-1))
-        return true;
-  }
-  return false;
+        if(sets.find(0) == sets.find(N-1))
+            return edges[i].first;
+    }
+    return INF;
 }
 
 int main()
@@ -85,7 +81,6 @@ int main()
             adj[i].clear();
 
         vector<int> weights;
-
         for(int i=0,u,v,w; i<M; ++i)
         {
             cin >> u >> v >> w;
@@ -109,29 +104,11 @@ int main()
         }
         sort(edges.begin(), edges.end());
 
-        int ret = 987654321;
+        int ret = INF;
 
-        for(int i=0; i<weights.size(); ++i)
-        {
-            int lo = weights[i];
-            int hi = 1000;
-            int mid;
+        for(int i = 0; i < weights.size(); ++i)
+            ret = min(ret, minUpperBound(edges, weights, i) - weights[i]);
 
-            while(lo <= hi)
-            {
-                mid = (lo + hi) / 2;
-
-                if(hasPath(edges, weights[i], mid))
-                {
-                    ret = min(ret, mid - weights[i]);
-                    hi = mid - 1;
-                }
-                else
-                {
-                    lo = mid + 1;
-                }
-            }
-        }
         result.push_back(ret);
     }
 

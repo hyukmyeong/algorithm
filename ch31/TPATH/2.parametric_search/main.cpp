@@ -5,7 +5,8 @@
 
 using namespace std;
 
-#define MAX_N 2000
+const int INF = 987654321;
+const int MAX_N = 2000;
 
 int C, N, M;
 vector<pair<int,int> > adj[MAX_N];
@@ -46,27 +47,29 @@ bool hasPath(int lo, int hi)
 }
 
 
-vector<int> weights;
-
-int minUpperBound(int low)
+int minUpperBound(vector<int>& weights, int low)
 {
     int lo = low - 1;
     int hi = weights.size();
 
-    while(lo <= hi)
+    while(lo + 1 <  hi)
     {
-        mid = (lo + hi) / 2;
+        int mid = (lo + hi) / 2;
 
-        if(hasPath(weights[i], mid))
+        if(hasPath(weights[low], weights[mid]))
         {
-            ret = min(ret, mid - weights[i]);
-            hi = mid - 1;
+            hi = mid;
         }
         else
         {
-            lo = mid + 1;
+            lo = mid;
         }
     }
+
+    if(hi == weights.size())
+        return INF;
+
+    return weights[hi];
 }
 
 int main()
@@ -81,6 +84,7 @@ int main()
         for(int i=0; i<N; ++i)
             adj[i].clear();
 
+        vector<int> weights;
         for(int i=0,u,v,w; i<M; ++i)
         {
             cin >> u >> v >> w;
@@ -91,10 +95,10 @@ int main()
         }
         sort(weights.begin(), weights.end());
 
-        int ret = 987654321;
+        int ret = INF;
 
         for(int i=0; i < weights.size(); ++i)
-            ret = min(ret, minUpperBound(i) - weights[i]);
+            ret = min(ret, minUpperBound(weights, i) - weights[i]);
 
         result.push_back(ret);
     }
