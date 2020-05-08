@@ -47,26 +47,9 @@ private:
   vector<int> parent, rank;
 };
 
-// by kruskal MST
-bool can_arrive_dest(int lo, int hi)
+// by kruskal
+bool hasPath(vector<pair<int, pair<int,int>>>& edges, int lo, int hi)
 {
-  int ret = 0;
-  int selected = 0;
-
-  vector<pair<int,pair<int,int> > > edges;
-  for(int u = 0; u < N; ++u)
-  {
-    for(int i = 0; i < adj[u].size(); ++i)
-    {
-      int v = adj[u][i].first;
-      int cost = adj[u][i].second;
-
-      edges.push_back(make_pair(cost, make_pair(u, v)));
-    }
-  }
-
-  sort(edges.begin(), edges.end());
-
   OptimizedDisjointSet sets(N);
 
   for(int i = 0; i < edges.size(); ++i)
@@ -82,13 +65,10 @@ bool can_arrive_dest(int lo, int hi)
       continue;
 
     sets.merge(u, v);
-    selected++;
-    ret += weight;
+
+    if(sets.find(0) == sets.find(N-1))
+        return true;
   }
-
-  if(selected == N-1)
-    return true;
-
   return false;
 }
 
@@ -114,8 +94,20 @@ int main()
             adj[v].push_back({u,w});
             weights.push_back(w);
         }
-
         sort(weights.begin(), weights.end());
+
+        vector<pair<int,pair<int,int>>> edges;
+        for(int u = 0; u < N; ++u)
+        {
+            for(int i = 0; i < adj[u].size(); ++i)
+            {
+                int v = adj[u][i].first;
+                int cost = adj[u][i].second;
+
+                edges.push_back(make_pair(cost, make_pair(u, v)));
+            }
+        }
+        sort(edges.begin(), edges.end());
 
         int ret = 987654321;
 
@@ -129,7 +121,7 @@ int main()
             {
                 mid = (lo + hi) / 2;
 
-                if(can_arrive_dest(weights[i], mid))
+                if(hasPath(edges, weights[i], mid))
                 {
                     ret = min(ret, mid - weights[i]);
                     hi = mid - 1;

@@ -11,7 +11,7 @@ int C, N, M;
 vector<pair<int,int> > adj[MAX_N];
 
 // by bfs
-bool can_arrive_dest(int lo, int hi)
+bool hasPath(int lo, int hi)
 {
     queue<int> q;
     vector<int> visit(MAX_N, 0);
@@ -48,6 +48,7 @@ bool can_arrive_dest(int lo, int hi)
 int main()
 {
     cin >> C;
+    vector<int> result;
 
     while(C--)
     {
@@ -81,7 +82,7 @@ int main()
             {
                 mid = (lo + hi) / 2;
 
-                if(can_arrive_dest(weights[i], mid))
+                if(hasPath(weights[i], mid))
                 {
                     ret = min(ret, mid - weights[i]);
                     hi = mid - 1;
@@ -92,6 +93,9 @@ int main()
                 }
             }
         }
-        cout << ret << endl;
+        result.push_back(ret);
     }
+
+    for(const auto& e : result)
+        cout << e << endl;
 }
