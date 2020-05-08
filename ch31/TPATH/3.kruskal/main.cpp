@@ -95,6 +95,8 @@ bool can_arrive_dest(int lo, int hi)
 int main()
 {
     cin >> C;
+    vector<int> result;
+
     while(C--)
     {
         cin >> N >> M;
@@ -138,6 +140,9 @@ int main()
                 }
             }
         }
-        cout << ret << endl;
+        result.push_back(ret);
     }
+
+    for(const auto& e : result)
+        cout << e << endl;
 }
