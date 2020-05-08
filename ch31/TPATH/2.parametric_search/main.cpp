@@ -45,6 +45,30 @@ bool hasPath(int lo, int hi)
     return false;
 }
 
+
+vector<int> weights;
+
+int minUpperBound(int low)
+{
+    int lo = low - 1;
+    int hi = weights.size();
+
+    while(lo <= hi)
+    {
+        mid = (lo + hi) / 2;
+
+        if(hasPath(weights[i], mid))
+        {
+            ret = min(ret, mid - weights[i]);
+            hi = mid - 1;
+        }
+        else
+        {
+            lo = mid + 1;
+        }
+    }
+}
+
 int main()
 {
     cin >> C;
@@ -57,8 +81,6 @@ int main()
         for(int i=0; i<N; ++i)
             adj[i].clear();
 
-        vector<int> weights;
-
         for(int i=0,u,v,w; i<M; ++i)
         {
             cin >> u >> v >> w;
@@ -67,32 +89,13 @@ int main()
             adj[v].push_back({u,w});
             weights.push_back(w);
         }
-
         sort(weights.begin(), weights.end());
 
         int ret = 987654321;
 
-        for(int i=0; i<weights.size(); ++i)
-        {
-            int lo = weights[i];
-            int hi = 1000;
-            int mid;
+        for(int i=0; i < weights.size(); ++i)
+            ret = min(ret, minUpperBound(i) - weights[i]);
 
-            while(lo <= hi)
-            {
-                mid = (lo + hi) / 2;
-
-                if(hasPath(weights[i], mid))
-                {
-                    ret = min(ret, mid - weights[i]);
-                    hi = mid - 1;
-                }
-                else
-                {
-                    lo = mid + 1;
-                }
-            }
-        }
         result.push_back(ret);
     }
 
