@@ -10,39 +10,81 @@ using namespace std;
 int C, N, M;
 vector<pair<int,int> > adj[MAX_N];
 
-// by bfs
+class OptimizedDisjointSet {
+public:
+  OptimizedDisjointSet(int n) : parent(n), rank(n)
+  {
+    for(int i=0; i<n; ++i)
+      parent[i] = i;
+  }
+
+  int find(int u)
+  {
+    if(u == parent[u])
+      return u;
+
+    return  parent[u] = find(parent[u]);
+  }
+
+  void merge(int u, int v)
+  {
+    u = find(u);
+    v = find(v);
+
+    if(u==v)
+      return;
+
+    if(rank[u] > rank[v])
+      swap(u, v);
+
+    parent[u] = v;
+
+    if(rank[u] == rank[v])
+      ++rank[v];
+  }
+
+private:
+  vector<int> parent, rank;
+};
+
+// by kruskal 
 bool can_arrive_dest(int lo, int hi)
 {
-    queue<int> q;
-    vector<int> visit(MAX_N, 0);
-    q.push(0);
-    visit[0]=1;
+  int ret = 0;
 
-    while(!q.empty())
+  vector<pair<int,pair<int,int> > > edges;
+  for(int u = 0; u < N; ++u)
+  {
+    for(int i = 0; i < adj[u].size(); ++i)
     {
-        int here = q.front();
-        q.pop();
+      int v = adj[u][i].first;
+      int cost = adj[u][i].second;
 
-        if(here == N-1)
-            break;
-
-        for(int i = 0; i < adj[here].size(); ++i) {
-            int there = adj[here][i].first;
-            int weight = adj[here][i].second;
-
-            if((weight < lo) || (weight > hi) || (visit[there]))
-                continue;
-
-            visit[there]=1;
-            q.push(there);
-        }
+      edges.push_back(make_pair(cost, make_pair(u, v)));
     }
+  }
 
-    // this is true if it can arrive vertex[N-1] from vertex[0]
-    if(visit[N-1])
-        return true;
+  sort(edges.begin(), edges.end());
 
-    return false;
+  OptimizedDisjointSet sets(N);
+
+  for(int i = 0; i < edges.size(); ++i)
+  {
+    int cost = edges[i].first;
+    int u = edges[i].second.first;
+    int v = edges[i].second.second;
+
+    if (sets.find(u) == sets.find(v))
+      continue;
+
+    sets.merge(u, v);
+    ret += cost;
+  }
+
+  if(visit[N-1])
+    return true;
+
+  return false;
 }
 
 int main()
