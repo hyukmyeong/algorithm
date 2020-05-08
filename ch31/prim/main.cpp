@@ -4,9 +4,9 @@
 
 using namespace std;
 
+int N;
 const int INF = 987654321;
 vector<pair<int,int>> adj[100];
-int N;
 
 void make_graph()
 {
