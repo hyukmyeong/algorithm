@@ -4,23 +4,24 @@
 
 using namespace std;
 
-const int MAX_V = 100;
-int V;
-
 class OptimizedDisjointSet {
 public:
-  OptimizedDisjointSet(int n) : parent(n), rank(n) {
+  OptimizedDisjointSet(int n) : parent(n), rank(n)
+  {
     for(int i=0; i<n; ++i)
       parent[i] = i;
   }
 
-  int find(int u) {
+  int find(int u)
+  {
     if(u == parent[u])
       return u;
+
     return  parent[u] = find(parent[u]);
   }
 
-  void merge(int u, int v) {
+  void merge(int u, int v)
+  {
     u = find(u);
     v = find(v);
 
@@ -35,13 +36,16 @@ public:
     if(rank[u] == rank[v])
       ++rank[v];
   }
+
 private:
   vector<int> parent, rank;
 };
 
-vector<pair<int,int>> adj[MAX_V];
+vector<pair<int,int> > adj[100];
+int N;
 
-void make_graph() {
+void make_graph()
+{
   // vertex a
   adj[0].push_back(make_pair(1,5)); // a-b
   adj[0].push_back(make_pair(2,1)); // a-c
@@ -73,23 +77,18 @@ void make_graph() {
   // vertex g
   adj[6].push_back(make_pair(1,3)); // g-b
   adj[6].push_back(make_pair(5,2)); // g-f
-
-#if 0
-  for (auto& v : adj) {
-    vector<pair<int,int>>::iterator iter;
-    for (iter=v.begin(); iter!=v.end(); ++iter)
-      cout << "[" << iter->first << "," << iter->second << "]" << endl;
-  }
-#endif
 }
 
-int kruskal(vector<pair<int,int>>& selected) {
+int kruskal(vector<pair<int,int> >& selected)
+{
   int ret = 0;
   selected.clear();
 
-  vector<pair<int,pair<int,int>>> edges;
-  for(int u = 0; u < V; ++u) {
-    for(int i = 0; i < adj[u].size(); ++i) {
+  vector<pair<int,pair<int,int> > > edges;
+  for(int u = 0; u < N; ++u)
+  {
+    for(int i = 0; i < adj[u].size(); ++i)
+    {
       int v = adj[u][i].first;
       int cost = adj[u][i].second;
 
@@ -99,9 +98,10 @@ int kruskal(vector<pair<int,int>>& selected) {
 
   sort(edges.begin(), edges.end());
 
-  OptimizedDisjointSet sets(V);
+  OptimizedDisjointSet sets(N);
 
-  for(int i = 0; i < edges.size(); ++i) {
+  for(int i = 0; i < edges.size(); ++i)
+  {
     int cost = edges[i].first;
     int u = edges[i].second.first;
     int v = edges[i].second.second;
@@ -116,19 +116,21 @@ int kruskal(vector<pair<int,int>>& selected) {
   return ret;
 }
 
-int main() {
-  V = 7;
+int main()
+{
+  N = 7;
   make_graph();
 
-  vector<pair<int,int>> selected;
+  vector<pair<int,int> > selected;
   cout << "result: " << kruskal(selected) << endl;
 
   int i = 1;
-  for(auto&& item : selected) {
-    cout << i << "th edge"
-         << " from: " << static_cast<char>('a'+item.first)
-         << " to: " << static_cast<char>('a'+item.second) << endl;
-    ++i;
+  for(auto& item : selected)
+  {
+    cout << i++
+         << "th edge"
+         << " src: " << static_cast<char>('a'+item.first)
+         << " dst: " << static_cast<char>('a'+item.second) << endl;
   }
 
   return 0;

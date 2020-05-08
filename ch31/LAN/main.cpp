@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <iomanip>
 
 using namespace std;
 
@@ -17,6 +18,7 @@ public:
   {
     if(u == parent[u])
       return u;
+
     return  parent[u] = find(parent[u]);
   }
 
@@ -36,18 +38,17 @@ public:
     if(rank[u] == rank[v])
       ++rank[v];
   }
+
 private:
   vector<int> parent, rank;
 };
-
-int C, N, M;
-const int MAX_V = 500;
-//vector<pair<int,int>> point;
 
 typedef struct {
     int x;
     int y;
 } Point;
+
+int C, N, M;
 vector<Point> points;
 
 double kruskal(OptimizedDisjointSet& set)
@@ -60,7 +61,6 @@ double kruskal(OptimizedDisjointSet& set)
   {
     for(int v = u+1; v < N; ++v)
     {
-      // weight = distance = sqrt (subX^2 + subY^2)
       int distance_x = abs(points[u].x - points[v].x);
       int distance_y = abs(points[u].y - points[v].y);
       double distance = sqrt(distance_x * distance_x + distance_y * distance_y);
@@ -89,6 +89,7 @@ double kruskal(OptimizedDisjointSet& set)
 int main()
 {
   cin >> C;
+
   for(int i=0; i<C; i++)
   {
     cin >> N >> M;
@@ -109,7 +110,7 @@ int main()
 
       set.merge(u, v);
     }
-    cout << fixed << kruskal(set) << endl;
+    cout << fixed << setprecision(10) << kruskal(set) << endl;
   }
   return 0;
 }

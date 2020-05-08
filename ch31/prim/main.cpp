@@ -4,13 +4,12 @@
 
 using namespace std;
 
-const int MAX_V = 100;
 const int INF = 987654321;
-int V;
+vector<pair<int,int>> adj[100];
+int N;
 
-vector<pair<int,int>> adj[MAX_V];
-
-void make_graph() {
+void make_graph()
+{
   // vertex a
   adj[0].push_back(make_pair(1,5)); // a-b
   adj[0].push_back(make_pair(2,1)); // a-c
@@ -44,21 +43,22 @@ void make_graph() {
   adj[6].push_back(make_pair(5,2)); // g-f
 }
 
-int prim(vector<pair<int,int>>& selected) {
+int prim(vector<pair<int,int>>& selected)
+{
   int ret = 0;
   selected.clear();
 
-  vector<bool> added(V, false);
-  vector<int> minWeight(V, INF);
-  vector<int> parent(V, -1);
+  vector<bool> added(N, false);
+  vector<int> minWeight(N, INF);
+  vector<int> parent(N, -1);
 
   minWeight[0] = parent[0] = 0;
 
-  for(int iter = 0; iter < V; ++iter) {
-
+  for(int iter = 0; iter < N; ++iter)
+  {
     // find next vertex
     int u = -1;
-    for(int v = 0; v < V; ++v)
+    for(int v = 0; v < N; ++v)
       if(!added[v] && (u == -1 || minWeight[u] > minWeight[v]))
           u = v;
 
@@ -70,11 +70,13 @@ int prim(vector<pair<int,int>>& selected) {
     added[u] = true;
 
     // check edges(u,v) near u
-    for(int i = 0; i < adj[u].size(); ++i) {
+    for(int i = 0; i < adj[u].size(); ++i)
+    {
       int v = adj[u][i].first;
       int weight = adj[u][i].second;
 
-      if(!added[v] && (minWeight[v] > weight)) {
+      if(!added[v] && (minWeight[v] > weight))
+      {
           parent[v] = u;
           minWeight[v] = weight;
       }
@@ -83,19 +85,21 @@ int prim(vector<pair<int,int>>& selected) {
   return ret;
 }
 
-int main() {
-  V = 7;
+int main()
+{
+  N = 7;
   make_graph();
 
   vector<pair<int,int>> selected;
   cout << "result: " << prim(selected) << endl;
 
   int i = 1;
-  for(auto&& item : selected) {
-    cout << i << "th edge"
-         << " from: " << static_cast<char>('a'+item.first)
-         << " to: " << static_cast<char>('a'+item.second) << endl;
-    ++i;
+  for(auto&& item : selected)
+  {
+    cout << i++
+         << "th edge"
+         << " src: " << static_cast<char>('a'+item.first)
+         << " dst: " << static_cast<char>('a'+item.second) << endl;
   }
 
   return 0;

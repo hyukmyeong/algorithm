@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-g -Wall
+CXXFLAGS=-g -std=c++17 -Wall
 OBJS=main.o
 TARGET=a.out
 
