@@ -13,39 +13,39 @@ vector<pair<int,int> > adj[MAX_N];
 
 class OptimizedDisjointSet {
 public:
-  OptimizedDisjointSet(int n) : parent(n), rank(n)
-  {
-    for(int i=0; i<n; ++i)
-      parent[i] = i;
-  }
+    OptimizedDisjointSet(int n) : parent(n), rank(n)
+    {
+        for(int i=0; i<n; ++i)
+            parent[i] = i;
+    }
 
-  int find(int u)
-  {
-    if(u == parent[u])
-      return u;
+    int find(int u)
+    {
+        if(u == parent[u])
+            return u;
 
-    return  parent[u] = find(parent[u]);
-  }
+        return  parent[u] = find(parent[u]);
+    }
 
-  void merge(int u, int v)
-  {
-    u = find(u);
-    v = find(v);
+    void merge(int u, int v)
+    {
+        u = find(u);
+        v = find(v);
 
-    if(u==v)
-      return;
+        if(u==v)
+            return;
 
-    if(rank[u] > rank[v])
-      swap(u, v);
+        if(rank[u] > rank[v])
+            swap(u, v);
 
-    parent[u] = v;
+        parent[u] = v;
 
-    if(rank[u] == rank[v])
-      ++rank[v];
-  }
+        if(rank[u] == rank[v])
+            ++rank[v];
+    }
 
 private:
-  vector<int> parent, rank;
+    vector<int> parent, rank;
 };
 
 // by kruskal
@@ -56,7 +56,7 @@ int minUpperBound(vector<pair<int,pair<int,int>>>& edges, vector<int>& weights, 
     for(int i = 0; i < edges.size(); ++i)
     {
         if(edges[i].first < weights[low])
-          continue;
+            continue;
 
         int u = edges[i].second.first;
         int v = edges[i].second.second;
