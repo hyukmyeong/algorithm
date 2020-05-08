@@ -47,10 +47,11 @@ private:
   vector<int> parent, rank;
 };
 
-// by kruskal 
+// by kruskal MST
 bool can_arrive_dest(int lo, int hi)
 {
   int ret = 0;
+  int selected = 0;
 
   vector<pair<int,pair<int,int> > > edges;
   for(int u = 0; u < N; ++u)
@@ -70,18 +71,22 @@ bool can_arrive_dest(int lo, int hi)
 
   for(int i = 0; i < edges.size(); ++i)
   {
-    int cost = edges[i].first;
+    int weight = edges[i].first;
     int u = edges[i].second.first;
     int v = edges[i].second.second;
+
+    if((weight < lo) || (weight > hi))
+      continue;
 
     if (sets.find(u) == sets.find(v))
       continue;
 
     sets.merge(u, v);
-    ret += cost;
+    selected++;
+    ret += weight;
   }
 
-  if(visit[N-1])
+  if(selected == N-1)
     return true;
 
   return false;
@@ -90,7 +95,6 @@ bool can_arrive_dest(int lo, int hi)
 int main()
 {
     cin >> C;
-
     while(C--)
     {
         cin >> N >> M;

@@ -90,9 +90,9 @@ int kruskal(vector<pair<int,int> >& selected)
     for(int i = 0; i < adj[u].size(); ++i)
     {
       int v = adj[u][i].first;
-      int cost = adj[u][i].second;
+      int weight = adj[u][i].second;
 
-      edges.push_back(make_pair(cost, make_pair(u, v)));
+      edges.push_back(make_pair(weight, make_pair(u, v)));
     }
   }
 
@@ -102,7 +102,7 @@ int kruskal(vector<pair<int,int> >& selected)
 
   for(int i = 0; i < edges.size(); ++i)
   {
-    int cost = edges[i].first;
+    int weight = edges[i].first;
     int u = edges[i].second.first;
     int v = edges[i].second.second;
 
@@ -111,7 +111,7 @@ int kruskal(vector<pair<int,int> >& selected)
 
     sets.merge(u, v);
     selected.push_back(make_pair(u, v));
-    ret += cost;
+    ret += weight;
   }
   return ret;
 }
