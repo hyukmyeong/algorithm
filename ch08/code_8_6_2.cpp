@@ -53,7 +53,7 @@ bool match(const string& pattern, const string& input)
     return false;
 
   // 여기까지 왔으면 pattern[pos] == * 인 상황임
-  for (unsigned int i = 0; pos + i < input.size(); i++)
+  for (unsigned int i = 0; pos + i <= input.size(); i++)
     if (match(pattern.substr(pos + 1), input.substr(pos + i)))
       return true;
 

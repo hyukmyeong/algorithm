@@ -17,7 +17,7 @@ problem g_problem;
 string g_pattern;
 string g_word;
 
-// unsigned int cache[101
+int cache[101][101];
 
 void get_input()
 {
@@ -41,37 +41,43 @@ void get_input()
 #if 1
 bool match(unsigned int pattern_idx, unsigned int word_idx)
 {
-  while (true) {
-    if (pattern_idx == g_pattern.size() || word_idx == g_word.size())
-      break;
+  int& res = cache[pattern_idx][word_idx];
 
-    if (g_pattern[pattern_idx] == g_word[word_idx] || g_pattern[pattern_idx] == '?') {
-      ++pattern_idx;
-      ++word_idx;
-    }
-    else
-      break;
+  if (res != -1)
+    return res;
+
+  while ((pattern_idx < g_pattern.size() && word_idx < g_word.size()) &&
+        (g_pattern[pattern_idx] == g_word[word_idx] || g_pattern[pattern_idx] == '?')) {
+    ++pattern_idx;
+    ++word_idx;
   }
 
-  if (pattern_idx == g_pattern.size() && word_idx == g_word.size())
+  if (pattern_idx == g_pattern.size() && word_idx == g_word.size()) {
+    res = true;
     return true;
+  }
 
-  if (g_pattern[pattern_idx] != '*')
+  if (g_pattern[pattern_idx] != '*') {
+    res = false;
     return false;
+  }
 
-  // 여기까지 왔으면 pattern[pos] == '*' 인 상황임
-  for (unsigned int i = 0; word_idx + i <= g_word.size(); i++)
-    if (match(pattern_idx + 1, word_idx + i))
+  for (unsigned int i = 0; word_idx + i <= g_word.size(); i++) {
+    if (match(pattern_idx + 1, word_idx + i)) {
+      res = true;
       return true;
+    }
+  }
 
+  res = false;
   return false;
 }
 #endif
 
 int main()
 {
-#if 1
-#if 1
+#if 0
+#if 0
   g_problem.pattern = "***";
   g_problem.words.push_back("abcde");
 #else
@@ -81,7 +87,7 @@ int main()
   g_problem.words.push_back("hello");
 #endif
 #else
-#if 0
+#if 1
   g_problem.pattern = "*bb*";
   g_problem.words.push_back("babbbc");
 #else
@@ -95,6 +101,7 @@ int main()
   g_pattern = g_problem.pattern;
 
   for (auto& item : g_problem.words) {
+    memset(cache, -1, sizeof(cache));
     g_word = item;
     if (match(0, 0))
       cout << g_word << endl;

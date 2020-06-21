@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include <cstring>
+#include <algorithm>
 
 using namespace std;
 
@@ -10,87 +11,74 @@ public:
   string pattern;
   vector<string> words;
 };
-int cnt;
-vector<problem> problems;
-
-problem g_problem;
+vector<problem> g_problems;
 string g_pattern;
 string g_word;
 
 void get_input()
 {
+  int cnt;
   cin >> cnt;
 
   for (int i = 0; i < cnt; i++) {
     problem p;
-    int cnt_inputs;
+    int cnt_words;
     cin >> p.pattern;
-    cin >> cnt_inputs;
+    cin >> cnt_words;
 
-    for (int j = 0; j < cnt_inputs; j++) {
+    for (int j = 0; j < cnt_words; j++) {
       string input;
       cin >> input;
       p.words.push_back(input);
     }
-    problems.push_back(p);
+    sort(p.words.begin(), p.words.end());
+    g_problems.push_back(p);
   }
 }
 
-#if 1
+int cache[101][101];
+
 bool match(unsigned int pattern_idx, unsigned int word_idx)
 {
-  while (true) {
-    if (pattern_idx == g_pattern.size() || word_idx == g_word.size())
-      break;
+  int& res = cache[pattern_idx][word_idx];
 
-    if (g_pattern[pattern_idx] == g_word[word_idx] || g_pattern[pattern_idx] == '?') {
-      ++pattern_idx;
-      ++word_idx;
-    }
-    else
-      break;
+  if (res != -1)
+    return res;
+
+  while ((pattern_idx < g_pattern.size() && word_idx < g_word.size()) &&
+        (g_pattern[pattern_idx] == g_word[word_idx] || g_pattern[pattern_idx] == '?'))
+    match(++pattern_idx, ++word_idx);
+
+  if (pattern_idx == g_pattern.size() && word_idx == g_word.size()) {
+    res = true;
+    return res;
   }
 
-  if (pattern_idx == g_pattern.size() && word_idx == g_word.size())
-    return true;
+  if (g_pattern[pattern_idx] == '*') {
+    if (match(pattern_idx + 1, word_idx) || match(pattern_idx, word_idx + 1)) {
+      res = true;
+      return res;
+    }
+  }
 
-  if (g_pattern[pattern_idx] != '*')
-    return false;
-
-  // 여기까지 왔으면 pattern[pos] == * 인 상황임
-  for (unsigned int i = 0; word_idx + i <= g_word.size(); i++)
-    if (match(pattern_idx + 1, word_idx + i))
-      return true;
-
-  return false;
+  res = false;
+  return res;
 }
-#endif
 
 int main()
 {
-#if 0
-  g_problem.pattern = "*p*";
-  g_problem.words.push_back("help");
-  g_problem.words.push_back("papa");
-  g_problem.words.push_back("hello");
-#else
-#if 0
-  g_problem.pattern = "*bb*";
-  g_problem.words.push_back("babbbc");
-#else
-  g_problem.pattern = "he?p";
-  g_problem.words.push_back("help");
-  g_problem.words.push_back("heap");
-  g_problem.words.push_back("helpp");
-#endif
-#endif
+  get_input();
 
-  g_pattern = g_problem.pattern;
+  for (auto problem : g_problems) {
+    g_pattern = problem.pattern;
 
-  for (auto& item : g_problem.words) {
-    g_word = item;
-    if (match(0, 0))
-      cout << g_word << endl;
+    for (auto& word : problem.words) {
+      memset(cache, -1, sizeof(cache));
+      g_word = word;
+
+      if (match(0, 0))
+        cout << g_word << endl;
+    }
   }
   return 0;
 }
