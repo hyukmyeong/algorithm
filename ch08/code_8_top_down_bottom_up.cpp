@@ -6,32 +6,47 @@
 
 using namespace std;
 
-int fib_bottom_up(int N)
+/* dynamic programming is not applied */
+int fib(int N)
 {
-  int a = 1, b = 1;
-  int ret = 1;
-
   if (N == 1 || N == 2)
     return 1;
 
-  for (int i = 3; i <= N; ++i) {
-    ret = a + b;
-    a = b;
-    b = ret;
-  }
-  return ret;
+  return fib(N-1) + fib(N-2);
 }
 
-int fib_top_down(int N)
+/* bottom-up approach */
+int fib_tabulation(int N)
+{
+  int cache[N + 1];
+  cache[0] = 0;
+  cache[1] = 1;
+
+  for (int i = 2; i <= N; i++)
+    cache[i] = cache[i-1] + cache[i-2];
+
+  return cache[N];
+}
+
+/* top-down approch */
+int cache[100];
+int fib_memoization(int N)
 {
   if (N == 1 || N == 2)
     return 1;
 
-  return fib_top_down(N-1) + fib_top_down(N-2);
+  if (cache[N] != -1)
+    return cache[N];
+
+  cache[N] = fib_memoization(N-1) + fib_memoization(N-2);
+  return cache[N];
 }
 
 int main()
 {
-  cout << fib_bottom_up(7) << endl;
-  cout << fib_top_down(7) << endl;
+  memset(cache, -1, sizeof(cache));
+
+  cout << fib(7) << endl;
+  cout << fib_tabulation(7) << endl;
+  cout << fib_memoization(7) << endl;
 }
