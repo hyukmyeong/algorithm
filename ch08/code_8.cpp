@@ -15,6 +15,7 @@ int fib(int N)
   return fib(N-1) + fib(N-2);
 }
 
+#if 0
 /* bottom-up approach */
 int fib_tabulation(int N)
 {
@@ -27,6 +28,27 @@ int fib_tabulation(int N)
 
   return cache[N];
 }
+#else
+int fib_tabulation(int N)
+{
+  if (N == 1 || N == 2)
+    return 1;
+
+  int before_1 = 1;
+  int before_2 = 1;
+  int res;
+
+  for (int i = 3; i <= N; ++i) {
+    res = before_1 + before_2;
+
+    before_2 = before_1;
+    before_1 = res;
+  }
+
+    return res;
+}
+
+#endif
 
 /* top-down approch */
 int cache[100];
