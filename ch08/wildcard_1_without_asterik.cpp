@@ -35,15 +35,7 @@ void get_input()
 bool match(const string& pattern, const string& input)
 {
   unsigned int pos = 0;
-
-  while (true) {
-    if (pattern[pos] == input[pos] || pattern[pos] == '?')
-      pos++;
-
-    if (pos >= pattern.size() || pos >= input.size())
-      break;
-  }
-  
+ 
   while (true) {
     if (pos == pattern.size() || pos == input.size())
       break;
