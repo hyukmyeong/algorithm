@@ -6,51 +6,54 @@
 
 using namespace std;
 
-static int g_cnt = 0;
+int n = 501;
+int cache[501];
+int S[500];
 
-int lis(const vector<int>& A)
+int lis(int start)
 {
-  g_cnt++;
-  if (A.empty())
-    return 0;
+    int& ret = cache[start + 1];
 
-  int ret = 0;
+    if (ret != -1)
+        return ret;
 
-  for (int i = 0; i < A.size(); ++i) {
+    ret = 1;
 
-    vector<int> B;
-    for (int j = i + 1; j < A.size(); ++j) {
-      if (A[i] < A[j])
-        B.push_back(A[j]);
+    for (int next = start + 1; next < n; ++next) {
+        if (start == -1 || S[start] < S[next])
+            ret = max(ret, lis(next) + 1);
     }
 
-    ret = max(ret, 1 + lis(B));
-  }
-  return ret;
+    return ret;
 }
+
 
 int main()
 {
-#if 0
-  int C, N;
-  cin >> C;
+    int C, N;
+    vector<vector<int>> A;
 
-  while (C-- > 0) {
-    cin >> N;
+    cin >> C;
+    while (C-- > 0) {
+        int num;
+        vector<int> B;
 
-    vector<int> A;
-    int num;
-    while (N-- > 0) {
-      cin >> num;
-      A.push_back(num);
+        cin >> N;
+
+        while (N-- > 0) {
+            cin >> num;
+            B.push_back(num);
+        }
+        A.push_back(B);
     }
-    cout << "result: " << lis(A) << endl;
-  }
-#else
-  vector<int> A = { 1, 2, 3, 4, 5 };
-  //vector<int> A = { 6, 5, 4, 3, 2, 1 };
-  cout << "result: " << lis(A) << endl;
 
-  cout << "final cnt: " << g_cnt << endl;
-#endif
+    for (auto&& item : A) {
+        memset(cache, -1, sizeof(cache));
+        memset(S, -1, sizeof(S));
+        copy(item.begin(), item.end(), S);
+
+        cout << lis(-1) - 1 << endl;
+    }
+
+    return 0;
 }
