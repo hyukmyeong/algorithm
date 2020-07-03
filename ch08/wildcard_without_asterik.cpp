@@ -43,6 +43,16 @@ bool match(string& pattern, string& input)
     if (pos >= pattern.size() || pos >= input.size())
       break;
   }
+  
+  while (true) {
+    if (pos == pattern.size() || pos == input.size())
+      break;
+
+    if (pattern[pos] == input[pos] || pattern[pos] == '?')
+      pos++;
+    else
+      break;
+  }
 
   if (pos == pattern.size() && pos == input.size())
     return true;
