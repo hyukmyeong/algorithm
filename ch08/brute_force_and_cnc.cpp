@@ -3,13 +3,14 @@
 #include <algorithm>
 
 int data[N];
-bool brute_force(int index)
+bool brute_force(int idx)
 {
     if (some_condition)
         return true;
 
+    int next_idx = idx + 1;
     for (int i = 0; i < 3; ++i) {
-        brute_force(next)
+        brute_force(next_idx);
     }
 }
 
