@@ -19,25 +19,6 @@ string g_word;
 
 int cache[101][101];
 
-void get_input()
-{
-  cin >> cnt;
-
-  for (int i = 0; i < cnt; i++) {
-    problem p;
-    int cnt_inputs;
-    cin >> p.pattern;
-    cin >> cnt_inputs;
-
-    for (int j = 0; j < cnt_inputs; j++) {
-      string input;
-      cin >> input;
-      p.words.push_back(input);
-    }
-    problems.push_back(p);
-  }
-}
-
 bool match(unsigned int pattern_idx, unsigned int input_idx)
 {
     int& res = cache[pattern_idx][input_idx];
@@ -73,6 +54,25 @@ bool match(unsigned int pattern_idx, unsigned int input_idx)
 
     res = false;
     return res;
+}
+
+void get_input()
+{
+  cin >> cnt;
+
+  for (int i = 0; i < cnt; i++) {
+    problem p;
+    int cnt_inputs;
+    cin >> p.pattern;
+    cin >> cnt_inputs;
+
+    for (int j = 0; j < cnt_inputs; j++) {
+      string input;
+      cin >> input;
+      p.words.push_back(input);
+    }
+    problems.push_back(p);
+  }
 }
 
 int main()
