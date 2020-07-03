@@ -10,8 +10,9 @@ bool brute_force(int idx)
 
     int next_idx = idx + 1;
     for (int i = 0; i < 3; ++i) {
-        brute_force(next_idx);
+        return brute_force(next_idx);
     }
+    return false;
 }
 
 int data[N];
