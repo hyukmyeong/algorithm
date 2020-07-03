@@ -14,11 +14,39 @@ int cnt;
 vector<problem> problems;
 
 problem g_problem;
+
 string g_pattern;
-string g_word;
+string g_input;
+
+bool match(unsigned int pattern_idx, unsigned int input_idx)
+{
+    while (true) {
+        if (pattern_idx == g_pattern.size() || input_idx == g_input.size())
+            break;
+
+        if (g_pattern[pattern_idx] == g_input[input_idx] || g_pattern[pattern_idx] == '?') {
+            ++pattern_idx;
+            ++input_idx;
+        }
+        else
+            break;
+    }
+
+    if (pattern_idx == g_pattern.size() && input_idx == g_input.size())
+        return true;
+
+    // 여기까지 왔으면 pattern[pos] == * 이거나 그게 아니라면 실패를 의미함
+    if (g_pattern[pattern_idx] == '*') {
+        for (unsigned int i = 0; input_idx + i <= g_input.size(); i++) {
+            if (match(pattern_idx + 1, input_idx + i))
+                return true;
+        }
+    }
+
+    return false;
+}
 
 // unsigned int cache[101
-
 void get_input()
 {
   cin >> cnt;
@@ -37,36 +65,6 @@ void get_input()
     problems.push_back(p);
   }
 }
-
-#if 1
-bool match(unsigned int pattern_idx, unsigned int word_idx)
-{
-  while (true) {
-    if (pattern_idx == g_pattern.size() || word_idx == g_word.size())
-      break;
-
-    if (g_pattern[pattern_idx] == g_word[word_idx] || g_pattern[pattern_idx] == '?') {
-      ++pattern_idx;
-      ++word_idx;
-    }
-    else
-      break;
-  }
-
-  if (pattern_idx == g_pattern.size() && word_idx == g_word.size())
-    return true;
-
-  if (g_pattern[pattern_idx] != '*')
-    return false;
-
-  // 여기까지 왔으면 pattern[pos] == '*' 인 상황임
-  for (unsigned int i = 0; word_idx + i <= g_word.size(); i++)
-    if (match(pattern_idx + 1, word_idx + i))
-      return true;
-
-  return false;
-}
-#endif
 
 int main()
 {
@@ -95,9 +93,9 @@ int main()
   g_pattern = g_problem.pattern;
 
   for (auto& item : g_problem.words) {
-    g_word = item;
+    g_input = item;
     if (match(0, 0))
-      cout << g_word << endl;
+      cout << g_input << endl;
   }
   return 0;
 }
