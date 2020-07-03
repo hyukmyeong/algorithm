@@ -32,30 +32,32 @@ void get_input()
   }
 }
 
-bool match(string& pattern, string& input)
+bool match(const string& pattern, const string& input)
 {
-  unsigned int pos = 0;
+    unsigned int pos = 0;
 
-  while (true) {
-    if (pos == pattern.size() || pos == input.size())
-      break;
+    while (true) {
+        if (pos == pattern.size() || pos == input.size())
+            break;
 
-    if (pattern[pos] == input[pos] || pattern[pos] == '?')
-      pos++;
-    else
-      break;
-  }
+        if (pattern[pos] == input[pos] || pattern[pos] == '?')
+            pos++;
+        else
+            break;
+    }
 
-  if (pos == pattern.size() && pos == input.size())
-    return true;
-
-  // 여기까지 왔으면 pattern[pos] == * 이거나 그게 아니라면 실패를 의미함
-  if (pattern[pos] != '*') {
-    for (unsigned int i = 0; pos + i <= input.size(); i++)
-      if (match(pattern.substr(pos + 1), input.substr(pos + i)))
+    if (pos == pattern.size() && pos == input.size())
         return true;
-  }
-  return false;
+
+    // 여기까지 왔으면 pattern[pos] == * 이거나 그게 아니라면 실패를 의미함
+    if (pattern[pos] == '*') {
+        for (unsigned int i = 0; pos + i <= input.size(); ++i) {
+            if (match(pattern.substr(pos + 1), input.substr(pos + i)))
+                return true;
+        }
+    }
+
+    return false;
 }
 
 int main()
