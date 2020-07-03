@@ -32,14 +32,15 @@ int lis(const vector<int>& A)
 int main()
 {
     int C, N;
-    cin >> C;
-
     vector<vector<int>> A;
+    
+    cin >> C;
     while (C-- > 0) {
+        int num;
+        vector<int> B;
+        
         cin >> N;
 
-        vector<int> B;
-        int num;
         while (N-- > 0) {
             cin >> num;
             B.push_back(num);
