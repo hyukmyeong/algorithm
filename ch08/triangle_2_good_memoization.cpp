@@ -32,6 +32,31 @@ int board[N][N] = {
 vector<vector<vector<int>>> g_data;
 vector<vector<int>> g_board;
 
+int board[5][5] = {
+  { 6, 0, 0, 0, 0 },
+  { 1, 2, 0, 0, 0 },
+  { 3, 7, 4, 0, 0 },
+  { 9, 4, 1, 7, 0 },
+  { 2, 7, 5, 9, 4 },
+};
+
+int cache[100][100];
+int triangle(int x, int y)
+{
+  int& res = cache[y][x];
+
+  if (res != -1)
+    return cache[y][x];
+
+  if (x == board.size() - 1 || y == board.size() - 1)
+    return board[y][x];
+
+  res = max(triangle(x, y + 1), triangle(x + 1, y + 1)) + board[y][x];
+
+  return res;
+}
+
+
 void get_data()
 {
   int cases = 0;
@@ -58,23 +83,6 @@ void get_data()
     }
     g_data.push_back(v1);
   }
-}
-
-int cache[100][100];
-
-int triangle(unsigned int x, unsigned int y)
-{
-  int& res = cache[y][x];
-
-  if (res != -1)
-    return cache[y][x];
-
-  if (x == g_board.size() - 1 || y == g_board.size() - 1)
-    return g_board[y][x];
-
-  res = max(triangle(x, y + 1), triangle(x + 1, y + 1)) + g_board[y][x];
-
-  return res;
 }
 
 int main()
