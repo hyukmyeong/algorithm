@@ -32,7 +32,7 @@ void get_input()
   }
 }
 
-bool match(string& pattern, string& input)
+bool match(const string& pattern, const string& input)
 {
   unsigned int pos = 0;
 
