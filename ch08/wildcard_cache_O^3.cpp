@@ -38,47 +38,42 @@ void get_input()
   }
 }
 
-#if 1
-bool match(unsigned int pattern_idx, unsigned int word_idx)
+bool match(unsigned int pattern_idx, unsigned int input_idx)
 {
-  int& res = cache[pattern_idx][word_idx];
+    int& res = cache[pattern_idx][input_idx];
+    if (res != -1)
+        return res;
 
-  if (res != -1)
-    return res;
+    while (true) {
+        if (pattern_idx == g_pattern.size() || input_idx == g_input.size())
+            break;
 
-  while (true) {
-    if (pattern_idx == g_pattern.size() || word_idx == g_word.size())
-      break;
-
-    if (g_pattern[pattern_idx] == g_word[word_idx] || g_pattern[pattern_idx] == '?') {
-      ++pattern_idx;
-      ++word_idx;
+        if (g_pattern[pattern_idx] == g_input[input_idx] || g_pattern[pattern_idx] == '?') {
+            ++pattern_idx;
+            ++input_idx;
+        }
+        else
+            break;
     }
-    else
-      break;
-  }
 
-  if (pattern_idx == g_pattern.size() && word_idx == g_word.size()) {
-    res = true;
-    return true;
-  }
+    if (pattern_idx == g_pattern.size() && input_idx == g_input.size()) {
+        res = true;
+        return res;
+    }
 
-  if (g_pattern[pattern_idx] != '*') {
+    // 여기까지 왔으면 pattern[pos] == * 이거나 그게 아니라면 실패를 의미함
+    if (g_pattern[pattern_idx] == '*') {
+        for (unsigned int i = 0; input_idx + i <= g_input.size(); i++) {
+            if (match(pattern_idx + 1, input_idx + i)) {
+                res = true;
+                return res;
+            }
+        }
+    }
+
     res = false;
-    return false;
-  }
-
-  // 여기까지 왔으면 pattern[pos] == '*' 인 상황임
-  for (unsigned int i = 0; word_idx + i <= g_word.size(); i++)
-    if (match(pattern_idx + 1, word_idx + i)) {
-      res = true;
-      return true;
-    }
-
-  res = false;
-  return false;
+    return res;
 }
-#endif
 
 int main()
 {
