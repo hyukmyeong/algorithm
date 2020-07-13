@@ -2,7 +2,7 @@
 * AOJ : https://algospot.com
 * BOJ : https://www.acmicpc.net/ 
 
-### Foreign Country
+### Global
 * https://www.hackerrank.com/dashboard
 * https://leetcode.com/
 * https://codinggame.com/
