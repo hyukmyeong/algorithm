@@ -5,4 +5,5 @@
   * https://www.acmicpc.net/problem/10989
 
 ### Solution
-* 2751 : Merge Sort, 10989 : Quick Sort
+* 2751 : Merge Sort
+* 10989 : Quick Sort
