@@ -44,7 +44,7 @@ int main()
     dl sum = 0ll;
     int cnt = 0;
     // S(x)에서 x를 찾는다. x== cnt
-    while(1){
+    while(1) {
         int tmp = 1 + count + 2;
         sum = sum * 2 + tmp;
         if (N < sum) {
