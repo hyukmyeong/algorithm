@@ -2,10 +2,13 @@
 #include <vector>
 #include <list>
 #include <string>
+
 using namespace std;
 typedef long long dl;
 dl N;
-void Divide(int count) {
+
+void Divide(int count)
+{
     int mid = 1 + count + 2;
     dl sum = 0ll;
     for (int i = 0; i < count; i++) {
@@ -31,7 +34,9 @@ void Divide(int count) {
         Divide(count - 1);
     }
 }
-int main() {
+
+int main()
+{
     cin.tie(0);
     ios_base::sync_with_stdio(false);
     cin >> N;
@@ -48,5 +53,4 @@ int main() {
         cnt++;
     }
     Divide(cnt);
-    
 }
