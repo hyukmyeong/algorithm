@@ -1,6 +1,6 @@
 ### Korea
 * AOJ : https://algospot.com
-* BOJ : https://www.acmicpc.net/ 
+* BOJ : https://www.acmicpc.net (https://solved.ac/problems/level)
 
 ### Global
 * https://www.hackerrank.com/dashboard
