@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/mk/work/algorithm/AOJ/ZIMBABWE/memoization/main.cpp
+iostream
+-
+vector
+-
+string
+-
+algorithm
+-
+cstring
+-
+bitset
+-
+iostream
+-
+string
+-
+vector
+-
+algorithm
+-
+cstring
+-
+bitset
+-
+
