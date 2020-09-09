@@ -1,3 +1,0 @@
-/home/mk/work/algorithm/AOJ/ZIMBABWE/memoization/CMakeFiles/rebuild_cache.dir
-/home/mk/work/algorithm/AOJ/ZIMBABWE/memoization/CMakeFiles/foo.dir
-/home/mk/work/algorithm/AOJ/ZIMBABWE/memoization/CMakeFiles/edit_cache.dir
