@@ -50,26 +50,23 @@ int main()
   int C;
   cin >> C;
 
+  vector<int> result;
+
   while (C--) {
     n = 0;
     memset(cache, -1, sizeof(cache));
 
     cin >> e >> m;
-    vector<long long> nums;
-    long long num = atoll(e.c_str());
-    nums.clear();
 
-    while (num > 0) {
-      nums.push_back(num % 10);
-      num /= 10;
-      n++;
-    }
+    n = e.size();
+    sorted_e = e;
+    sort(sorted_e.begin(), sorted_e.end());
 
-    sort(nums.begin(), nums.end());
-    for (int i=0; i < n; ++i)
-      sorted_e += nums[i] + '0';
-
-    cout << price(0, 0, 0, 0) << endl;
+    result.push_back(price(0, 0, 0, 0));
   }
+
+  for (const auto& item : result)
+    cout << item << endl;
+
   return 0;
 }
