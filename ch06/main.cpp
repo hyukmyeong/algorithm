@@ -1,52 +1,71 @@
-int n, double dist[MAX][MAX];
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <cstring>
 
-// path : 지금까지 만든 경로
-// visited : 각 도시의 방문 여부
-// currentLength: 지금까지 만든 경로의 길이
-// 나머지 도시들을 모두 방문하는 경로들 중 가장 짧은 것의 길이를 반환한다
-double shortestPath(vector<int>& path, vector<bool>& visited, double currentLength) {
-  // 기저사례: 모든 도시를 다 방문했을 떄는 시작 도시로 돌아가고 종료한다
-  if(path.size == n)
+using namespace std;
+
+const int N = 4;
+int dist[N][N] = {
+  {  0,  3, 10,  4},
+  {  3,  0,  5,  7},
+  { 10,  5,  0,  7},
+  {  4,  1,  7,  0},
+};
+
+#if 1
+int shortestPath(vector<int>& path, vector<bool>& visited, int currentLength)
+{
+  if(path.size() == N)
     return currentLength + dist[path[0]][path.back()];
 
-  double ret = INF;	// 매우 큰 값으로 초기화 (확인안된 경로는 거리가 무한대라는 의미)
-  // 다음 방문할 도시를 전부 시도해 본다.
-  for(int next = 0; next < n; ++next) {
+  int ret = 987654321;
+
+  for(int next = 0; next < N; ++next) {
     if(visited[next])
       continue;
 
     int here = path.back();
     path.push_back(next);
+
     visited[next] = true;
 
-    // 나머지 경로를 재귀 호출을 통해 완성하고 가장 짧은 경로의 길이를 얻는다.
-    double cand = shortestPath(path, visited, currentLength + dist[here][next]);
+    int cand = shortestPath(path, visited, currentLength + dist[here][next]);
     ret = min(ret, cand);
-    visited[next] = flase;
+
+    visited[next] = false;
+
     path.pop_back();
   }
   return ret;
 }
 
-int n, dist[MAX][MAX];
-double cache[MAX][1<<MAX];
-
-double shortestPath2(int here, int visited)
+int main()
 {
-  if (visited == (1<<n)-1)
+  vector<int> path {0};
+  vector<bool> visited {true,false,false,false};
+
+  cout << shortestPath(path, visited, 0) << endl;
+  return 0;
+}
+#else
+int cache[N][1<<N];
+int shortestPath2(int here, int visited)
+{
+  if (visited == (1<<N)-1)
     return dist[here][0];
 
-  double& ret = cache[here][visited];
+  int& ret = cache[here][visited];
   if (ret >= 0)
     return ret;
 
-  ret = INF;
+  ret = 987654321;
 
-  for (int next=0; next<n; ++next) {
+  for (int next=0; next<N; ++next) {
     if (visited & (1<<next))
       continue;
 
-    double cand = dist[here][next] + shortestPath2(next, visited + 1(<<next));
+    int cand = dist[here][next] + shortestPath2(next, visited + (1<<next));
     ret = min(ret, cand);
   }
   return ret;
@@ -54,4 +73,9 @@ double shortestPath2(int here, int visited)
 
 int main()
 {
+  memset(cache, -1, sizeof(cache));
+
+  cout << shortestPath2(0, 1) << endl;
+  return 0;
 }
+#endif
