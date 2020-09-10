@@ -8,3 +8,6 @@
 * https://codinggame.com/
 * https://codeforces.com/
 * https://www.topcoder.com/
+
+### Reference
+* https://gooddaytocode.blogspot.com/2016/04/blog-post_27.html
