@@ -83,6 +83,7 @@ int solve(vector<int>& key>)
 //https://www.acmicpc.net/problem/1722
 
 int factorials[12];
+
 int getIndex(const vector<int> &X)
 {
   int ret = 0;
@@ -95,13 +96,6 @@ int getIndex(const vector<int> &X)
     ret += factorials[X.size()-i-1] * less;
   }
   return ret;
-}
-
-void initialize(void)
-{
-  factorials[0] = factorials[1] = 1;
-  for (int i = 2; i <= 11; i++)
-    factorials[i] = i*factorials[i - 1];
 }
 
 int cache[100];
@@ -117,7 +111,14 @@ int solve(vector<int>& key)
 int main(void)
 {
   memset(cache, -1, sizeof(cache));
-  solve(X1);
+
+  factorials[0] = factorials[1] = 1;
+  for (int i = 2; i <= 11; i++)
+    factorials[i] = i*factorials[i - 1];
+
+  cout << solve(X1) << endl;
+
+  return 0;
 
 #if 0
   initialize();
@@ -128,7 +129,4 @@ int main(void)
 
   cout << 9*8*7*6*5*4*3*2*1 << endl; // 32880
 #endif
-
-
-  return 0;
 }
