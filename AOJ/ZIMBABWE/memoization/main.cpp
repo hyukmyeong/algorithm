@@ -55,7 +55,6 @@ int main()
   while (C--) {
     n = 0;
     memset(cache, -1, sizeof(cache));
-
     cin >> e >> m;
 
     n = e.size();
