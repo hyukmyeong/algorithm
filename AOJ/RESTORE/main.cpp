@@ -39,19 +39,16 @@ string reconstruct(int last, int used)
   if (used == (1 << K) - 1)
     return "";
 
-  //다음에 올 문자열 조각을 찾는다
   for (int next = 0; next < K; next++) {
-    //next가 이미 사용되었으면 제외
     if (used & (1 << next))
       continue;
 
-    //next를 사용했을 경우의 답이 최적해와 같다면 next를 사용
     int ifUsed = restore(next, used + (1 << next)) + overlap[last][next];
     if (restore(last, used) == ifUsed)
-      return (word[next].substr(overlap[last][next]) + reconstruct(next, used + (1 << next))); //used+(1<<next)->next 사용했다고 표시
+      return (word[next].substr(overlap[last][next]) + reconstruct(next, used + (1 << next)));
 
   }
-  return "error!";
+  return "****ooops****";
 }
 
 int get_overlap(const string &s1, const string &s2)
