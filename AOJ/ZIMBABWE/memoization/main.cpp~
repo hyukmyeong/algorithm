@@ -26,19 +26,20 @@ int price(int index, int taken, int mod, int less)
 
   for (int next = 0; next < n; ++next) {
 
-    if (!less && e[index] < sorted_e[next])
-        continue;
-
     if ((taken & (1 << next)) == 0) {
 
-      if (next == 0 || sorted_e[next-1] != sorted_e[next] || (taken & (1 << (next-1))) != 0) {
+      if (!less && e[index] < sorted_e[next])
+        continue;
 
-        int nextTaken = taken | (1 << next);
-        int nextMod = (mod * 10 + sorted_e[next] - '0') % m;
-        int nextLess = less || e[index] > sorted_e[next];
+      if (next > 0 && sorted_e[next-1] == sorted_e[next] && (taken & (1 << (next-1))) == 0)
+          continue;
 
-        ret += price(index+1, nextTaken, nextMod, nextLess) % MOD;
-      }
+      int nextTaken = taken | (1 << next);
+      int nextMod = (mod * 10 + sorted_e[next] - '0') % m;
+      int nextLess = less || e[index] > sorted_e[next];
+
+      ret += price(index+1, nextTaken, nextMod, nextLess);
+      ret %= MOD;
     }
   }
   return ret;

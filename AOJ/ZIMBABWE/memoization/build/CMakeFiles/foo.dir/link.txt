@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/foo.dir/main.cpp.o  -o foo 
