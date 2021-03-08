@@ -13,3 +13,4 @@
 * https://gooddaytocode.blogspot.com/2016/04/blog-post_27.html
 * https://jaimemin.tistory.com/464
 * https://m.blog.naver.com/kks227/220795165570
+* https://blog.naver.com/kdr06006/221803321164
